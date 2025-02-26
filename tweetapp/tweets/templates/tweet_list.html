@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block title %}Tweets{% endblock %}
+
+{% block content %}
+This is a content
+
+<a class='btn btn-primary' href="{% url 'tweet_create' %}">Create a Tweet</a>
+
+<div class="container d-flex flex-wrap gap-3">
+    {% for tweet in tweets %}
+        <div class="card" style="width: 18rem;">
+            {% if tweet.photo %}
+                <img src="{{ tweet.photo.url }}" class="card-img-top" alt="Tweet Image" style="height:150px">
+            {% else %}
+                <img src="/static/images/default.jpg" class="card-img-top" alt="Default Image" style="height:150px">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ tweet.user.username }}</h5>
+                <p class="card-text">{{ tweet.text|escape }}</p>
+                {% if tweet.user == user %}
+                <a href="{% url 'tweet_edit' tweet.id %}" class="btn btn-primary">EDIT</a>
+                <a href="{% url 'tweet_delete' tweet.id %}" class="btn btn-danger">DELETE</a>
+                {%endif%}
+            </div>
+        </div>
+    {% empty %}
+        <p>No tweets available.</p>
+    {% endfor %}
+</div>
+{% endblock %}
